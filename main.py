@@ -4,13 +4,16 @@ import csv
 from datetime import datetime
 from upload_gdrive import Upload_GDrive
 import logging
+from config import CONFIG
+
 # logging.debug('This message should go to the log file')
 # logging.info('So should this')
 # logging.warning('And this, too')
 # logging.error('And non-ASCII stuff, too, like Øresund and Malmö')
 # A function that get the data from the database, creates a file and returns the names of the files
 def get_data():
-    conn = pymysql.connect(host='localhost', user='maddozs', password='DevOps2021@', db='uady_sicei')
+
+    conn = pymysql.connect(host=CONFIG.host, user=CONFIG.user, password=CONFIG.password, db=CONFIG.db)
     sql_tables = "SHOW TABLES;"
     tables_name = None
     with conn.cursor() as cur:
