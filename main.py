@@ -13,11 +13,10 @@ from config import CONFIG
 # A function that get the data from the database, creates a file and returns the names of the files
 def get_data():
     logging.debug('get_data method called')
-
-    conn = pymysql.connect(host=CONFIG["host"], user=CONFIG["user"], password=CONFIG["password"], db=CONFIG["database"], port=CONFIG["port"])
     sql_tables = "SHOW TABLES;"
     tables_name = None
     try:
+        conn = pymysql.connect(host=CONFIG["host"], user=CONFIG["user"], password=CONFIG["password"], db=CONFIG["database"], port=CONFIG["port"])
         with conn.cursor() as cur:
             cur.execute(sql_tables)
             logging.debug('fetchall method called')
