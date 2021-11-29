@@ -14,7 +14,7 @@ from config import CONFIG
 def get_data():
     logging.debug('get_data method called')
 
-    conn = pymysql.connect(host=CONFIG["host"], user=CONFIG["user"], password=CONFIG["password"], db=CONFIG["database"])
+    conn = pymysql.connect(host=CONFIG["host"], user=CONFIG["user"], password=CONFIG["password"], db=CONFIG["database"], port=CONFIG["port"])
     sql_tables = "SHOW TABLES;"
     tables_name = None
     try:

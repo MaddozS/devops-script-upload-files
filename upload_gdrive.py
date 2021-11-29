@@ -10,7 +10,7 @@ class Upload_GDrive:
     def __init__(self):
         logging.debug('Upload_GDrive instance initialized')
         self.scope = ['https://www.googleapis.com/auth/drive']
-        self.credentials = ServiceAccountCredentials.from_json_keyfile_name('client_secrets.json', self.scope)
+        self.credentials = ServiceAccountCredentials.from_json_keyfile_name('/app/client_secrets.json', self.scope)
         self.service = build('drive', 'v3', credentials=self.credentials)
    
     def upload_file(self, file_path, file_name):
