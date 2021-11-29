@@ -12,36 +12,49 @@ from config import CONFIG
 # logging.error('And non-ASCII stuff, too, like Øresund and Malmö')
 # A function that get the data from the database, creates a file and returns the names of the files
 def get_data():
+    logging.debug('get_data method called')
 
-    conn = pymysql.connect(host=CONFIG.host, user=CONFIG.user, password=CONFIG.password, db=CONFIG.db)
+    conn = pymysql.connect(host=CONFIG["host"], user=CONFIG["user"], password=CONFIG["password"], db=CONFIG["database"])
     sql_tables = "SHOW TABLES;"
     tables_name = None
-    with conn.cursor() as cur:
-        cur.execute(sql_tables)
-        result = cur.fetchall()
-        tables_name = [table[0] for table in result]
-
-    sql_query = "SELECT * FROM {};"
-    new_files_name = []
-    for table in tables_name:
+    try:
         with conn.cursor() as cur:
-            cur.execute(sql_query.format(table))
-            rows = cur.fetchall()
-            headers = [col[0] for col in cur.description] # get headers
+            cur.execute(sql_tables)
+            logging.debug('fetchall method called')
+            result = cur.fetchall()
+            tables_name = [table[0] for table in result]
 
-            # check if folder 'tables' exists
-            if not os.path.exists('tables'):
-                os.makedirs('tables')
+        sql_query = "SELECT * FROM {};"
+        new_files_name = []
+        for table in tables_name:
+            with conn.cursor() as cur:
+                cur.execute(sql_query.format(table))
+                rows = cur.fetchall()
+                logging.debug('fetchall method called')
+                headers = [col[0] for col in cur.description] # get headers
 
-            # get the current timestamp
-            timestamp  =  datetime.now()
+                # check if folder 'tables' exists
+                logging.info('checking if folder tables exist...')
+                if not os.path.exists('tables'):
+                    os.makedirs('tables')
 
-            # create a csv file for each table
-            with open( f'tables/{table}_{timestamp}.csv', 'w', newline='') as csvfile:
-                new_files_name.append(f'tables/{table}_{timestamp}.csv')
-                writer = csv.writer(csvfile)
-                writer.writerow(headers)
-                writer.writerows(rows)
+                # get the current timestamp
+                timestamp  =  datetime.now()
+
+                # create a csv file for each table
+                with open( f'tables/{table}_{timestamp}.csv', 'w', newline='') as csvfile:
+                    files_name = csvfile.name
+                    logging.info(f'creating {files_name} file...')
+
+                    new_files_name.append(files_name)
+
+                    logging.info(f'Adding information to {files_name} file...')
+                    writer = csv.writer(csvfile)
+                    writer.writerow(headers)
+                    writer.writerows(rows)
+
+    except Exception as e:
+        logging.exception("Error getting tables")
 
             # data.append(result)
     return new_files_name
