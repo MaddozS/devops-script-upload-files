@@ -2,11 +2,8 @@ import os
 import pymysql
 import csv
 from datetime import datetime
-
-import logging
-
 from upload_gdrive import Upload_GDrive
-# logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
+import logging
 # logging.debug('This message should go to the log file')
 # logging.info('So should this')
 # logging.warning('And this, too')
@@ -55,6 +52,13 @@ def upload_to_drive(files_name):
 
 # main 
 if __name__ == "__main__":
+    # start logger
+    logging.basicConfig(handlers=[
+        logging.FileHandler("logs.log"),
+        logging.StreamHandler()
+    ], level=logging.DEBUG)
+
+    logging.info('Script started: Uploading files to Google Drive...')
     files_name = get_data()
     upload_to_drive(files_name)
-    print('Done!')
+    logging.info('Script finished!')
