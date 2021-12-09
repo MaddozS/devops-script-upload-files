@@ -69,7 +69,7 @@ def upload_to_drive(files_name):
 if __name__ == "__main__":
     # start logger
     logging.basicConfig(handlers=[
-        logging.FileHandler("logs.log"),
+        logging.FileHandler("/app/logs.log"),
         logging.StreamHandler()
     ], level=logging.DEBUG)
 
